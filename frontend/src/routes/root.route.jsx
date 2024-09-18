@@ -9,11 +9,10 @@ const RootRouter = () => {
   return (
     <Routes>
       <Route path='/' index element={<LandingPage />} />
-      <Route path='*' index element={<PageNotFound />} />
       <Route path='/account/login' element={<LoginPage />} />
       <Route path='/account/signup' element={<SignupPage />} />
       <Route path='/account/reset' element={<ResetPage />} />
-      <Route path='*' element={<NotFoundPage />} /> 
+      <Route path='*' index element={<PageNotFound />} />
     </Routes>
   );
 };
