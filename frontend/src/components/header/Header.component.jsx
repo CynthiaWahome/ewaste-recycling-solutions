@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setMenuOpen(prevMenuOpen => !prevMenuOpen);
@@ -24,7 +26,7 @@ const Header = () => {
           <button
             type='button'
             className='inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-100 hover:bg-gray-100'
-            onClick={toggleMenu}
+            onClick={() => navigate('/account')}
           >
             <svg
               className={`w-6 h-6 ${menuOpen ? 'hidden' : 'block'}`}
@@ -89,7 +91,7 @@ const Header = () => {
           </div>
 
           <a
-            href='#'
+            href='/account/login'
             title=''
             className='items-center justify-center hidden px-4 py-3 ml-10 text-base font-semibold text-white transition-all duration-200 bg-green-600 border border-transparent rounded-md lg:inline-flex hover:bg-green-700 focus:bg-green-700'
             role='button'
@@ -135,7 +137,7 @@ const Header = () => {
 
           <div className='px-6 mt-6'>
             <a
-              href='#'
+              href='/account/login'
               title=''
               className='inline-flex justify-center px-4 py-3 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md items-center hover:bg-blue-700 focus:bg-blue-700'
               role='button'
