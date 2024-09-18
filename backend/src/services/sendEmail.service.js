@@ -1,45 +1,41 @@
-const nodemailer = require('nodemailer');
-const hbs = require('nodemailer-express-handlebars');
-const mailGun = require('nodemailer-mailgun-transport');
-const { API_KEY, DOMAIN } = require('../config/secrets.config');
+const brevo = require('@getbrevo/brevo');
+const fs = require('fs/promises');
+const path = require('path');
+const Handlebars = require('handlebars');
+const { BREVO_API_KEY } = require('../config/secrets.config');
+
+const apiInstance = new brevo.TransactionalEmailsApi();
+const apiKey = apiInstance.authentications.apiKey;
+apiKey.apiKey = BREVO_API_KEY;
 
 const sendEmail = async (email, subject, templateName, data) => {
   try {
-    const transporter = nodemailer.createTransport(
-      mailGun({
-        auth: {
-          api_key: API_KEY,
-          domain: DOMAIN
-        }
-      })
+    const templatePath = path.resolve(
+      __dirname,
+      '../emails',
+      `${templateName}.handlebars`
     );
+    const templateSource = await fs.readFile(templatePath, 'utf-8');
 
-    transporter.use(
-      'compile',
-      hbs({
-        viewEngine: {
-          partialsDir: './src/emails/',
-          defaultLayout: false
-        },
-        viewPath: './src/emails/'
-      })
-    );
+    const template = Handlebars.compile(templateSource);
 
-    await transporter.sendMail({
-      from: 'Ewaste Admin <admin@ewaste.net>',
-      to: email,
-      subject,
-      template: templateName,
-      context: {
-        ...data
-      }
-    });
+    const htmlContent = template(data);
 
-    console.log('email sent sucessfully');
+    const emailToSend = new brevo.SendSmtpEmail();
+    emailToSend.subject = subject;
+    emailToSend.htmlContent = htmlContent;
+    emailToSend.sender = {
+      name: 'Cynthia from E-waste',
+      email: 'cynthiaawsajira@gmail.com'
+    };
+    emailToSend.to = [{ name: data.name || 'Valued Customer', email }];
+
+    const resp = await apiInstance.sendTransacEmail(emailToSend);
+    console.log(resp.body);
+    console.log('Email sent successfully');
   } catch (error) {
-    console.log(error, 'email not sent');
-    console.log(API_KEY);
-    console.log(DOMAIN);
+    console.error('Error sending email:', error);
+    throw error;
   }
 };
 
