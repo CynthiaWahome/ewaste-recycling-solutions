@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/footer/Footer.component';
 
-const NotFoundPage = () => {
+const PageNotFound = () => {
   const navigate = useNavigate();
 
   const handleGoHome = () => {
@@ -91,4 +91,4 @@ const styles = {
   }
 };
 
-export default NotFoundPage;
+export default PageNotFound;

@@ -1,9 +1,8 @@
 import LandingPage from '../pages/Landing.page';
-import NotFoundPage from '../pages/NotFound.page';
+import PageNotFound from '../pages/PageNotFound.page';
 import LoginPage from '../pages/Login.page';
 import SignupPage from '../pages/Signup.page';
 import ResetPage from '../pages/Reset.page';
-
 import { Routes, Route } from 'react-router-dom';
 
 const RootRouter = () => {
@@ -13,7 +12,7 @@ const RootRouter = () => {
       <Route path='/account/login' element={<LoginPage />} />
       <Route path='/account/signup' element={<SignupPage />} />
       <Route path='/account/reset' element={<ResetPage />} />
-      <Route path='*' element={<NotFoundPage />} />
+      <Route path='*' index element={<PageNotFound />} />
     </Routes>
   );
 };
