@@ -1,25 +1,62 @@
+import { useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import authService from '../../services/auth.service';
 
 const Signup = () => {
+  const toast = useToast();
   const [name, setName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('user');
-  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
+    setIsLoading(true);
     const data = { username, password, name, email, role };
-    console.log(data);
-    const resp = await authService.registerUser(data);
-    if (resp.status === 201) {
-      console.log('User created sucessfully');
-      console.log(resp.data);
+    try {
+      const resp = await authService.registerUser(data);
+      console.log(resp);
+      if (resp.status === 201) {
+        console.log('User created successfully');
+        toast({
+          title: 'Account Created',
+          description: 'Check your email to verify your account',
+          status: 'success',
+          isClosable: true,
+          duration: 9000
+        });
+        setIsLoading(!isLoading);
+      } else if (resp.status === 409) {
+        toast({
+          title: 'Email is already in use',
+          description: 'A user with that email already exists, try another one',
+          status: 'error',
+          isClosable: true,
+          duration: 9000
+        });
+        setIsLoading(!isLoading);
+      } else {
+        toast({
+          title: 'An unknown error occurred',
+          description: 'Our team is aware and is working to fix this',
+          status: 'error',
+          isClosable: true,
+          duration: 9000
+        });
+      }
+    } catch (error) {
+      console.error('Error during user registration:', error);
+      toast({
+        title: 'Error',
+        description: 'Something went wrong. Please try again.',
+        status: 'error',
+        isClosable: true,
+        duration: 9000
+      });
     }
-    console.log('Signing up with role:', role);
-    setError('');
   };
 
   return (
@@ -84,28 +121,12 @@ const Signup = () => {
               </select>
             </div>
 
-            {error && (
-              <div className='mb-4 text-red-500 flex items-center'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='h-5 w-5 mr-2'
-                  viewBox='0 0 20 20'
-                  fill='currentColor'
-                >
-                  <path
-                    fillRule='evenodd'
-                    d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z'
-                    clipRule='evenodd'
-                  />
-                </svg>
-                <span>{error}</span>
-              </div>
-            )}
             <button
               type='submit'
               className='w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'
+              disabled={isLoading}
             >
-              Sign Up
+              {isLoading ? 'Signing Up...' : 'Sign Up'}
             </button>
           </form>
         </div>

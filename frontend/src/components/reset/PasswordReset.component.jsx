@@ -1,19 +1,37 @@
+import { useToast } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
+import authService from '../../services/auth.service';
 
 const PasswordReset = () => {
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const toast = useToast();
 
-  const handlePasswordReset = (e) => {
+  const handlePasswordReset = async (e) => {
     e.preventDefault();
-    if (email) {
+    if (email !== '') {
+      const payload = { email };
+      const resp = await authService.forgotPasword(payload);
+      if (resp.status === 200) {
+        toast({
+          title: 'Password reset initiated',
+          description: 'check your email for an OTP',
+          status: 'success',
+          duration: 9700,
+          isClosable: true
+        });
+        navigate('/account/reset');
+      }
       console.log(`Sending password reset link to ${email}`);
-      setMessage('Reset instructions have been sent to your email.');
-      setError('');
     } else {
-      setError('Please enter a valid email.');
-      setMessage('');
+      toast({
+        title: 'Could not reset your password',
+        description: 'No user with this email exists',
+        status: 'error',
+        duration: 8000,
+        isClosable: true
+      });
     }
   };
 
@@ -36,16 +54,6 @@ const PasswordReset = () => {
                 required
               />
             </div>
-            {message && (
-              <div className='mb-4 text-green-500'>
-                <span>{message}</span>
-              </div>
-            )}
-            {error && (
-              <div className='mb-4 text-red-500'>
-                <span>{error}</span>
-              </div>
-            )}
             <button
               type='submit'
               className='w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'

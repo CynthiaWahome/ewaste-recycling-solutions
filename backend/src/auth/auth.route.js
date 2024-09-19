@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 /* user auth router */
-
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
@@ -36,7 +35,7 @@ authRouter.post('/register', async (req, resp, next) => {
     const id = newUser._id;
 
     const token = crypto.randomBytes(32).toString('hex');
-    const url = `${CLIENT_URL}auth/verify/${id}?token=${token}`;
+    const url = `${CLIENT_URL}/account/verify/${id}?token=${token}`;
 
     const data = {
       name,
@@ -62,7 +61,7 @@ authRouter.post('/register', async (req, resp, next) => {
 
 // verify account functionality
 
-authRouter.get('/verify/:id', async (req, resp, next) => {
+authRouter.get('/verify/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const token = req.query.token;
@@ -71,18 +70,16 @@ authRouter.get('/verify/:id', async (req, resp, next) => {
       userId: id,
       action: 'verify'
     });
-    if (user === null || hashedVerifyToken === null) {
-      return resp
-        .status(403)
-        .json({ error: 'cannot verify account at this time' });
+
+    if (hashedVerifyToken === null) {
+      return res.status(404).json({ error: 'Invalid token' });
     }
 
-    // console.log(hashedVerifyToken);
     const validVerifyToken = await bcrypt.compare(
       token,
       hashedVerifyToken.value
     );
-    // account is valid
+
     if (validVerifyToken) {
       await User.updateOne(
         { _id: id },
@@ -100,7 +97,16 @@ authRouter.get('/verify/:id', async (req, resp, next) => {
         'verified',
         data
       );
-      return resp.json({ status: 'success', message: 'user is verified' });
+
+      res.json({
+        status: 'success',
+        message: 'Account verified successfully',
+        userName: user.name
+      });
+    } else {
+      res
+        .status(403)
+        .json({ status: 'error', message: 'Invalid verification token' });
     }
   } catch (error) {
     next(error);

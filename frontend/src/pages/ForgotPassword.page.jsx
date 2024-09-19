@@ -1,15 +1,15 @@
-import Login from '../components/login/Login.component';
+import NewPasswordSetting from '../components/reset/NewPasswordForm.component';
 import Footer from '../components/footer/Footer.component';
 import Header from '../components/header/Header.component';
 
-const LoginPage = () => {
+const ForgotPasswordPage = () => {
   return (
     <>
       <Header />
-      <Login />
+      <NewPasswordSetting />
       <Footer />
     </>
   );
 };
 
-export default LoginPage;
+export default ForgotPasswordPage;
