@@ -190,8 +190,9 @@ authRouter.post("/reset", async (req, resp, next) => {
   const token = req.query.token;
   const { password, email } = req.body;
 
-  if (!id || !token) return resp.status(400).json({ error: "bad request" });
+  if (!token) return resp.status(400).json({ error: "bad request" });
   const user = await User.findOne({ email });
+  const id = user._id
   if (!user) {
     return resp.status(404).json({ error: "no user with such email exists" });
   }
