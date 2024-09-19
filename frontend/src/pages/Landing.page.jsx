@@ -1,10 +1,16 @@
 import React from 'react';
 import Footer from '../components/footer/Footer.component';
+import AuthHeader from '../components/header/AuthHeader.component';
 import Header from '../components/header/Header.component';
+import { useAuth } from '../hooks/auth';
+
 const LandingPage = () => {
+  const { getUser } = useAuth();
+  const user = JSON.parse(getUser());
+
   return (
     <div style={styles.container}>
-      <Header />
+      {user ? <AuthHeader /> : <Header />}
       <header style={styles.header}>
         <h1 style={styles.heading}>E-Waste Recycling Solutions</h1>
         <p style={styles.subHeading}>
