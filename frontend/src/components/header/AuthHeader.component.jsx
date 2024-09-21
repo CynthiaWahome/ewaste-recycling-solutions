@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserCircle, LogOut, User, History, Bell, Loader, LayoutDashboard } from 'lucide-react';
+import { UserCircle, LogOut, User, History, Bell, Loader, LayoutDashboard, Search } from 'lucide-react';
 import { Menu } from '@headlessui/react';
 import NotificationPanel from '../notifications/NotificationPanel.component';
 
@@ -9,6 +9,7 @@ const AuthHeader = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [unreadNotifications, setUnreadNotifications] = useState(3);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleLogout = () => {
     setIsLoggingOut(true);
@@ -21,6 +22,12 @@ const AuthHeader = () => {
 
   const handleNotificationClick = () => {
     setIsNotificationOpen(!isNotificationOpen);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // Implement search functionality here
+    console.log('Searching for:', searchQuery);
   };
 
   const menuItems = [
@@ -42,6 +49,25 @@ const AuthHeader = () => {
                 alt='Logo'
               />
             </a>
+          </div>
+
+          {/* Updated Search Component */}
+          <div className='flex-grow mx-4 max-w-xs'>
+            <form onSubmit={handleSearch} className='relative'>
+              <input
+                type='text'
+                placeholder='Search...'
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className='w-full px-2 py-3 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500'
+              />
+              <button
+                type='submit'
+                className='absolute right-2 top-1/2 transform -translate-y-1/2'
+              >
+                <Search className='h-4 w-4 text-gray-400' />
+              </button>
+            </form>
           </div>
 
           <div className='flex items-center'>
