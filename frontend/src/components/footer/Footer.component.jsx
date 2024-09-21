@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { About } from './about.component';
 
 const Footer = () => {
   return (
@@ -102,7 +103,7 @@ const Footer = () => {
             <ul className='mt-6 space-y-4'>
               <li>
                 <a
-                  href='#'
+                  href='/about'
                   title=''
                   className='flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600'
                 >
@@ -154,7 +155,7 @@ const Footer = () => {
             <ul className='mt-6 space-y-4'>
               <li>
                 <a
-                  href='#'
+                  href='/support'
                   title=''
                   className='flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600'
                 >
