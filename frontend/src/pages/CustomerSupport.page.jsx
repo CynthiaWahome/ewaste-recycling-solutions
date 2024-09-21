@@ -1,48 +1,60 @@
 import { useState } from 'react';
+import supportService from '../services/support.service';
+import { useToast } from '@chakra-ui/react';
 
 const CustomerSupport = () => {
-    const [email, setEmail] = useState("")
-    const [name, setName] = useState("")
-    const [textarea, setTextarea] = useState("")
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [textarea, setTextarea] = useState('');
+  const toast = useToast();
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const payload = { name, email, textarea }
-        console.log(payload);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const payload = { name, email, issue: textarea };
+    const resp = await supportService.createSupportTicket(payload);
+    console.log(resp);
+
+    if (resp.status === 201) {
+      return toast({
+        title: 'Support Ticket Created',
+        description: 'We have received your support request',
+        status: 'success',
+        duration: 9000,
+        isClosable: true
+      });
     }
+    console.log(payload);
+  };
 
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label> Enter your name:
+          <input
+            type='text' name='username' value={name} onChange={(e) => setName(e.target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label> Enter your email address:
+          <input
+            type='text' name='email' value={email} onChange={(e) => setEmail(e.target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <textarea
+          value={textarea} onChange={(e) => {
+            setTextarea(e.target.value);
+          }}
+        />
+      </div>
+      <div><button>Submit</button></div>
+    </form>
+  );
+};
 
-    return (
-        <form onSubmit={handleSubmit} >
-            <div>
-                <label> Enter your name: 
-                    <input type="text" name="username" value={ name } onChange={(e) => setName(e.target.value)}
-                    />
-                </label>
-            </div>
-            <div>
-                <label> Enter your email address: 
-                    <input type="text" name="email" value={ email } onChange={(e) => setEmail(e.target.value)}
-                    />
-                </label>
-            </div>
-            <div>
-                <textarea value={textarea} onChange={ (e) => 
-                { 
-                    setTextarea(e.target.value) 
-                }  
-                    } />
-            </div>
-            <div><button>Submit</button></div>
-        </form>
-    )
-}
-
-// const root = ReactDOM.createRoot(document.gretElementById('root'));
-// root.render (<CustomerSupport />)
-
-export default CustomerSupport ;
-
+export default CustomerSupport;
 
 // import React from "react";
 // import { useNavigate } from "react-router-dom";
@@ -79,7 +91,6 @@ export default CustomerSupport ;
 //                     <p>{data}</p>
 //                     <input type="submit" />
 //                     </form>
-
 
 //                     <p className="mb-10 text-base md:text-lg">
 //                         Join us in creating a sustainable future!
