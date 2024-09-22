@@ -89,7 +89,8 @@ authRouter.get('/verify/:id', async (req, res, next) => {
 
       await hashedVerifyToken.deleteOne();
       const data = {
-        name: user.name
+        name: user.name,
+        login_link: `${CLIENT_URL}/account/login`
       };
       await sendEmail(
         user.email,
