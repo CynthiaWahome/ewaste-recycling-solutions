@@ -11,7 +11,7 @@ const AboutUs = () => {
   const navigate = useNavigate();
 
   const handleGoHome = () => {
-    navigate('/about');
+    navigate('/');
   };
 
   return (
@@ -34,9 +34,7 @@ const AboutUs = () => {
             <button
               className='bg-green-600 text-white px-6 py-3 rounded-full text-lg md:text-xl hover:bg-green-700 transition-all'
               onClick={handleGoHome}
-            >
-              <p>Dispose your e-waste here</p>
-            </button>
+            >Dispose your e-waste here</button>
           </div>
         </div>
         <Footer />
