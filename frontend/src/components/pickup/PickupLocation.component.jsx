@@ -1,45 +1,140 @@
-import React from 'react';
-import { UserCircle, Search } from 'lucide-react';
+import React, { useState } from 'react';
+import { SearchIcon } from '@chakra-ui/icons';
+import { Box, Button, Input, Text, UnorderedList, ListItem, useToast } from '@chakra-ui/react';
+import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
+import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
+import { useSelector } from 'react-redux';
+import { useAuth } from '../../hooks/auth';
+import orderService from '../../services/order.service';
+
+const libraries = ['places'];
+const mapContainerStyle = { width: '100%', height: '100%' };
+const center = { lat: 0, lng: 0 };
 
 const PickupLocationMap = ({ formData }) => {
-  console.log(formData);
+  const { getUser } = useAuth();
+  const user = JSON.parse(getUser());
+  const orderDetails = useSelector(state => state.order);
+  const toast = useToast();
+  const [selected, setSelected] = useState(center);
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: 'AIzaSyBtOtH6MfeRqJmV-m-Qwla2gao4JQfGsZo',
+    libraries
+  });
+
+  const {
+    ready,
+    value,
+    suggestions: { status, data },
+    setValue,
+    clearSuggestions
+  } = usePlacesAutocomplete();
+
+  const handleSelect = async (address) => {
+    setValue(address, false);
+    clearSuggestions();
+
+    try {
+      const results = await getGeocode({ address });
+      const { lat, lng } = await getLatLng(results[0]);
+      setSelected({ lat, lng });
+      console.log(selected);
+    } catch (error) {
+      console.error('Error: ', error);
+    }
+  };
+
+  const handleCreate = async () => {
+    const auth = user.accessToken;
+    const newOrder = { ...orderDetails, location: selected };
+    console.log(newOrder);
+    const resp = await orderService.createOrder(newOrder, auth);
+    if (resp.status === 201) {
+      console.log(resp.data);
+      return toast({
+        title: ' Pickup requested successfully',
+        description: 'We have recived a request to pickup your ewaste',
+        isClosable: true,
+        duration: 9000,
+        status: 'success',
+        position: 'top-right'
+      });
+    }
+  };
+
+  if (loadError) return 'Error loading maps';
+  if (!isLoaded) return 'Loading Maps';
 
   return (
-    <div className='flex items-center justify-center max-w-3xl mx-auto mt-10 mb-6'>
-      <div className='bg-white rounded-lg shadow-md overflow-hidden'>
-        <div className='bg-green-400 p-4 text-white'>
-          <p className='font-bold mb-2'>
+    <Box maxWidth='3xl' mx='auto' mt={10} mb={6}>
+      <Box bg='white' borderRadius='lg' boxShadow='md' overflow='hidden'>
+        <Box bg='green.400' p={4} color='white'>
+          <Text fontWeight='bold' mb={2}>
             Do you know we generate 40 million tons of electronic waste every
             year, worldwide?
-          </p>
-          <p className='text-sm'>
+          </Text>
+          <Text fontSize='sm'>
             That's like throwing 800 laptops every second.
-          </p>
-        </div>
+          </Text>
+        </Box>
 
-        <div className='p-4'>
-          <div className='relative'>
-            <input
-              type='text'
+        {selected && (
+          <Box bg='green.500' p={4} color='white'>
+            <Text fontWeight='bold' mb={5}>
+              Location set to {selected.lat}, {selected.lng}
+            </Text>
+          </Box>
+        )}
+
+        <Box p={4}>
+          <Box position='relative'>
+            <Input
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              disabled={!ready}
               placeholder='Enter pick-up point'
-              className='w-full p-2 pl-10 pr-4 border border-gray-300 rounded-full'
+              pl={10}
             />
-            <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400' />
-          </div>
-        </div>
+            <SearchIcon position='absolute' left={3} top='50%' transform='translateY(-50%)' color='gray.400' />
+          </Box>
+          {status === 'OK' && (
+            <UnorderedList mt={2} borderWidth={1} borderColor='gray.300' borderRadius='md'>
+              {data.map(({ place_id, description }) => (
+                <ListItem
+                  key={place_id}
+                  onClick={() => handleSelect(description)}
+                  p={2}
+                  _hover={{ bg: 'gray.100' }}
+                  cursor='pointer'
+                >
+                  {description}
+                </ListItem>
+              ))}
+            </UnorderedList>
+          )}
+        </Box>
 
-        <div className='relative h-64 bg-gray-200 mx-4 mb-4 rounded-lg overflow-hidden'>
-          <img
-            src='https://img.icons8.com/?size=100&id=ngxhKjJtc4LX&format=png&color=000000'
-            alt='Map'
-            className='w-full h-full object-cover'
-          />
-          <div className='absolute top-1/4 left-1/4 w-8 h-8 bg-red-500 rounded-full border-4 border-white transform -translate-x-1/2 -translate-y-1/2' />
-          <div className='absolute top-1/2 left-1/2 w-12 h-12 bg-red-500 rounded-full border-4 border-white transform -translate-x-1/2 -translate-y-1/2' />
-          <div className='absolute bottom-1/4 right-1/4 w-8 h-8 bg-red-500 rounded-full border-4 border-white transform -translate-x-1/2 -translate-y-1/2' />
-        </div>
-      </div>
-    </div>
+        <Box h='64' mx={4} mb={4} borderRadius='lg' overflow='hidden'>
+          <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            zoom={10}
+            center={selected || center}
+          >
+            {selected && <Marker position={selected} />}
+          </GoogleMap>
+        </Box>
+
+        <Box p={4}>
+          <Button
+            onClick={handleCreate}
+            width='full'
+            colorScheme='green'
+          >
+            Create
+          </Button>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

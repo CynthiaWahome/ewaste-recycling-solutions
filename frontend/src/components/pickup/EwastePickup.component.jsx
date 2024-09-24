@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import { Camera, Image, Plus, X } from 'lucide-react';
+import orderService from '../../services/order.service';
+import { useDispatch } from 'react-redux';
+import { order } from '../../reducers/order.reducer';
 
 const EWastePickupForm = ({ onSubmit }) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [instructions, setInstructions] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleItemSelect = (item) => {
     if (selectedItems.includes(item)) {
@@ -13,8 +20,34 @@ const EWastePickupForm = ({ onSubmit }) => {
     }
   };
 
+  const uploadImage = async (file) => {
+    setIsUploading(true);
+    const data = new FormData();
+    data.append('file', file);
+    data.append('upload_preset', 'ggnbgs4v');
+    data.append('cloud_name', 'dkmdeg6fc');
+
+    try {
+      const response = await orderService.cloudinaryUpload(data);
+      setImageUrl(response.data.secure_url);
+      console.log(response.data.secure_url);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      uploadImage(file);
+    }
+  };
+
   const handleSubmit = () => {
-    onSubmit({ selectedItems, instructions });
+    onSubmit({ selectedItems, instructions, imageUrl });
+    dispatch(order({ description: instructions, imageUrl, tags: selectedItems }));
   };
 
   return (
@@ -55,15 +88,35 @@ const EWastePickupForm = ({ onSubmit }) => {
           </div>
 
           <div className='flex gap-4 mb-4'>
-            <button className='flex-1 bg-cyan-500 text-white py-2 rounded flex items-center justify-center'>
+            <label className='flex-1 bg-cyan-500 text-white py-2 rounded flex items-center justify-center cursor-pointer'>
               <Camera className='mr-2' />
               Take a photo
-            </button>
-            <button className='flex-1 bg-cyan-500 text-white py-2 rounded flex items-center justify-center'>
+              <input
+                type='file'
+                accept='image/*'
+                capture='environment'
+                onChange={handleImageUpload}
+                className='hidden'
+              />
+            </label>
+            <label className='flex-1 bg-cyan-500 text-white py-2 rounded flex items-center justify-center cursor-pointer'>
               <Image className='mr-2' />
               Choose from Gallery
-            </button>
+              <input
+                type='file'
+                accept='image/*'
+                onChange={handleImageUpload}
+                className='hidden'
+              />
+            </label>
           </div>
+
+          {isUploading && <p>Uploading image...</p>}
+          {imageUrl && (
+            <div className='mb-4'>
+              <img src={imageUrl} alt='Uploaded e-waste' className='w-full rounded' />
+            </div>
+          )}
 
           <div className='mb-4'>
             <label htmlFor='instructions' className='block mb-2 font-semibold'>
@@ -82,6 +135,7 @@ const EWastePickupForm = ({ onSubmit }) => {
           <button
             onClick={handleSubmit}
             className='w-full bg-gray-300 text-gray-700 py-2 rounded font-semibold'
+            disabled={isUploading}
           >
             Next
           </button>

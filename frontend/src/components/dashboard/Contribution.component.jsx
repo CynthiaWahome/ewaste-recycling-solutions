@@ -1,10 +1,8 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const ContributionHistory = () => {
-  const contributions = [
-    { date: '2024-09-15', item: 'Laptop', quantity: 1 },
-    { date: '2024-09-10', item: 'Mobile Phone', quantity: 2 }
-  ];
+  const contributions = useSelector(state => state.contribution);
 
   return (
     <div className='font-sans text-gray-800  p-4 mb-4 mt-10  max-w-3xl mx-auto'>
@@ -15,12 +13,12 @@ const ContributionHistory = () => {
 
         <div className='flex justify-center space-x-4 my-4'>
           <img
-            src='/public/confetti.png'
+            src='/confetti.png'
             alt='Confetti'
             className='w-16 h-16'
           />
           <img
-            src='/public/trophy.png'
+            src='/trophy.png'
             alt='Trophy'
             className='w-16 h-16'
           />
@@ -33,15 +31,15 @@ const ContributionHistory = () => {
               <tr className='bg-gray-100'>
                 <th className='border p-2 text-left'>Date</th>
                 <th className='border p-2 text-left'>Item</th>
-                <th className='border p-2 text-left'>Quantity</th>
+                <th className='border p-2 text-left'>Status</th>
               </tr>
             </thead>
             <tbody>
               {contributions.map((contribution, index) => (
                 <tr key={index}>
-                  <td className='border p-2'>{contribution.date}</td>
-                  <td className='border p-2'>{contribution.item}</td>
-                  <td className='border p-2'>{contribution.quantity}</td>
+                  <td className='border p-2'>{new Date(contribution.createdAt).toDateString()}</td>
+                  <td className='border p-2'><img className='w-16 h-16' src={contribution.imageUrl} /></td>
+                  <td className='border p-2'>{contribution.status}</td>
                 </tr>
               ))}
             </tbody>
