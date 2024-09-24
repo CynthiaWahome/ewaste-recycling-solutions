@@ -11,6 +11,9 @@ const DOMAIN = process.env.DOMAIN.trim();
 const BREVO_API_KEY = process.env.BREVO_API_KEY.trim();
 const BREVO_SMTP_USER = process.env.BREVO_SMTP_USER.trim();
 const BREVO_SMTP_PASSWORD = process.env.BREVO_SMTP_PASSWORD.trim();
+const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET.trim();
+const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY.trim();
+const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME.trim();
 
 module.exports = {
   PORT,
@@ -21,5 +24,8 @@ module.exports = {
   JWT_SECRET_KEY,
   BREVO_API_KEY,
   BREVO_SMTP_USER,
-  BREVO_SMTP_PASSWORD
+  BREVO_SMTP_PASSWORD,
+  CLOUDINARY_API_SECRET,
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_CLOUD_NAME
 };

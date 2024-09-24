@@ -34,7 +34,8 @@ const AboutUs = () => {
             <button
               className='bg-green-600 text-white px-6 py-3 rounded-full text-lg md:text-xl hover:bg-green-700 transition-all'
               onClick={handleGoHome}
-            >Dispose your e-waste here</button>
+            >Dispose your e-waste here
+            </button>
           </div>
         </div>
         <Footer />

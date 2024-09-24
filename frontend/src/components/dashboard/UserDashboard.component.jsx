@@ -2,20 +2,59 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Truck, Package, ClipboardList, User, Calendar } from 'lucide-react';
 import { useAuth } from '../../hooks/auth';
+import authService from '../../services/auth.service';
+import { initializeContribution } from '../../reducers/contribution.reducer';
+import { useDispatch } from 'react-redux';
 
 const UserDashboard = () => {
-  const [userName, setUserName] = useState('');
+  const dispatch = useDispatch();
+  const [userData, setUserData] = useState(null);
   const [pickupStats, setPickupStats] = useState({ completed: 0, pending: 0, scheduled: 0 });
   const navigate = useNavigate();
   const { getUser } = useAuth();
   const user = JSON.parse(getUser());
-  console.log(user);
 
   useEffect(() => {
-    // TODO: Fetch user data and stats from  API
-    setUserName(user.name);
-    setPickupStats({ completed: 5, pending: 1, scheduled: 2 });
+    const fetchUserData = async () => {
+      try {
+        const response = await authService.userProfile(user.accessToken);
+        if (response.status === 200) {
+          setUserData(response.data.user);
+          calculatePickupStats(response.data.user.orders);
+          dispatch(initializeContribution((response.data.user.orders)));
+        } else {
+          console.error('Failed to fetch user data');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
   }, []);
+
+  const calculatePickupStats = (orders) => {
+    const stats = {
+      completed: 0,
+      pending: 0,
+      scheduled: 0
+    };
+
+    orders.forEach(order => {
+      switch (order.status) {
+        case 'completed':
+          stats.completed++;
+          break;
+        case 'initiated':
+          stats.pending++;
+          break;
+        default:
+          stats.scheduled++;
+      }
+    });
+
+    setPickupStats(stats);
+  };
 
   const quickActions = [
     { name: 'New Pickup Request', icon: <Truck size={24} />, action: () => navigate('/pickup/new') },
@@ -24,10 +63,18 @@ const UserDashboard = () => {
     { name: 'Edit Profile', icon: <User size={24} />, action: () => navigate('/account/profile') }
   ];
 
+  if (!userData) {
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <div className='animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900' />
+      </div>
+    );
+  }
+
   return (
     <div className='bg-green-50 min-h-screen p-8'>
       <div className='max-w-4xl mx-auto'>
-        <h1 className='text-3xl font-bold text-gray-800 mb-8'>Welcome, {userName}!</h1>
+        <h1 className='text-3xl font-bold text-gray-800 mb-8'>Welcome, {userData.name}!</h1>
 
         <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-8'>
           <div className='bg-white p-6 rounded-lg shadow'>
@@ -68,14 +115,12 @@ const UserDashboard = () => {
         <div className='bg-white p-6 rounded-lg shadow mb-8'>
           <h2 className='text-xl font-semibold mb-4'>Upcoming Pickups</h2>
           <ul className='space-y-4'>
-            <li className='flex items-center text-gray-600'>
-              <Calendar size={20} className='mr-2' />
-              <span>Pickup scheduled for June 20, 2023</span>
-            </li>
-            <li className='flex items-center text-gray-600'>
-              <Calendar size={20} className='mr-2' />
-              <span>Pickup scheduled for June 25, 2023</span>
-            </li>
+            {userData.orders && userData.orders.filter(order => order.status !== 'completed').slice(0, 2).map((order, index) => (
+              <li key={index} className='flex items-center text-gray-600'>
+                <Calendar size={20} className='mr-2' />
+                <span>Pickup scheduled for {new Date(order.createdAt).toLocaleDateString()}</span>
+              </li>
+            ))}
           </ul>
         </div>
 
