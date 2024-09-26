@@ -124,23 +124,23 @@ const Footer = () => {
 
               <li>
                 <a
-                  href='#'
+                  href='/blog'
                   title=''
                   className='flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600'
                 >
                   {' '}
-                  Works{' '}
+                  Blog{' '}
                 </a>
               </li>
 
               <li>
                 <a
-                  href='#'
+                  href='/faq'
                   title=''
                   className='flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600'
                 >
                   {' '}
-                  Career{' '}
+                  FAQ{' '}
                 </a>
               </li>
             </ul>
@@ -176,7 +176,7 @@ const Footer = () => {
 
               <li>
                 <a
-                  href='#'
+                  href='/terms'
                   title=''
                   className='flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600'
                 >
@@ -187,7 +187,7 @@ const Footer = () => {
 
               <li>
                 <a
-                  href='#'
+                  href='/privacy'
                   title=''
                   className='flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600'
                 >

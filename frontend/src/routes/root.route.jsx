@@ -1,7 +1,11 @@
 import LandingPage from '../pages/Landing.page';
 import PageNotFound from '../pages/PageNotFound.page';
 import AboutUs from '../pages/AboutUs.page';
+import Blog from '../pages/Blog.page';
+import FAQ from '../pages/FAQ.page';
 import CustomerSupport from '../pages/CustomerSupport.page';
+import TermsandConditions from '../pages/TermsandConditions.pages';
+import PrivacyPolicy from '../pages/PrivacyPolicy.pages';
 import LoginPage from '../pages/Login.page';
 import SignupPage from '../pages/Signup.page';
 import ResetPage from '../pages/Reset.page';
@@ -22,7 +26,11 @@ const RootRouter = () => {
     <Routes>
       <Route path='/' index element={<LandingPage />} />
       <Route path='/about' element={<AboutUs />} />
+      <Route path='/blog' element={<Blog />} />
+      <Route path='/faq' element={<FAQ />} /> 
       <Route path='/support' element={<CustomerSupport />} />
+      <Route path='/terms' element={<TermsandConditions />} />
+      <Route path='/privacy' element={<PrivacyPolicy />} />
       <Route path='/account/login' element={<LoginPage />} />
       <Route path='/account/signup' element={<SignupPage />} />
       <Route path='/account/forgot' element={<ResetPage />} />
