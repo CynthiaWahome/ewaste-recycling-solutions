@@ -13,6 +13,7 @@ import ProfilePage from '../pages/Profile.page';
 import NotificationsPage from '../pages/Notifications.page';
 import ForgotPasswordPage from '../pages/ForgotPassword.page';
 import PrivateRoute from './Private.route';
+import OrdersPage from '../pages/PickupRequests.page';
 
 import { Routes, Route } from 'react-router-dom';
 
@@ -30,6 +31,7 @@ const RootRouter = () => {
       <Route path='/account/verify/:id' element={<VerificationPage />} />
       <Route path='/pickup/new' element={<EWastePickupFlow />} />
       <Route path='/pickup/history' element={<History />} />
+      <Route path='/pickup/requests' element={<OrdersPage/>} />
       <Route
         path='/account/dashboard'
         element={
