@@ -7,8 +7,8 @@ import { useAuth } from '../hooks/auth';
 
 const AboutUs = () => {
   useEffect(() => {
-    window.scrollTo(0,0)
-  }, [])
+    window.scrollTo(0, 0);
+  }, []);
   const { getUser } = useAuth();
   const user = JSON.parse(getUser());
   const navigate = useNavigate();

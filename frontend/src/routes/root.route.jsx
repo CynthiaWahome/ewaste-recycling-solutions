@@ -27,7 +27,7 @@ const RootRouter = () => {
       <Route path='/' index element={<LandingPage />} />
       <Route path='/about' element={<AboutUs />} />
       <Route path='/blog' element={<Blog />} />
-      <Route path='/faq' element={<FAQ />} /> 
+      <Route path='/faq' element={<FAQ />} />
       <Route path='/support' element={<CustomerSupport />} />
       <Route path='/terms' element={<TermsandConditions />} />
       <Route path='/privacy' element={<PrivacyPolicy />} />
@@ -39,7 +39,7 @@ const RootRouter = () => {
       <Route path='/account/verify/:id' element={<VerificationPage />} />
       <Route path='/pickup/new' element={<EWastePickupFlow />} />
       <Route path='/pickup/history' element={<History />} />
-      <Route path='/pickup/requests' element={<OrdersPage/>} />
+      <Route path='/pickup/requests' element={<OrdersPage />} />
       <Route
         path='/account/dashboard'
         element={
