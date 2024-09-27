@@ -7,7 +7,7 @@ const registerUser = async (userDetails) => {
     return res;
   } catch (error) {
     console.log(error.message);
-    return { status: 409 };
+    return error.response;
   }
 };
 
@@ -16,8 +16,7 @@ const loginUser = async (userDetails) => {
     const res = await axios.post(`${API_URL}/auth/login`, userDetails);
     return res;
   } catch (error) {
-    console.log(error.message);
-    return { status: 403 };
+    return error.response;
   }
 };
 
@@ -36,7 +35,7 @@ const resetPassword = async (userDetails, token) => {
     );
     return res;
   } catch (err) {
-    console.log(err);
+    return err.response;
   }
 };
 
@@ -46,7 +45,7 @@ const forgotPasword = async (payload) => {
     return res;
   } catch (err) {
     console.log(err.message);
-    return { status: 404 };
+    return err.response;
   }
 };
 
@@ -64,11 +63,35 @@ const userProfile = async (auth) => {
   }
 };
 
+const updateUserProfile = async (newUser, auth) => {
+  try {
+    res = await axios.put(`${API_URL}/user/profile`, newUser, {
+      headers: {
+        Authorization: `Bearer ${auth}`
+      }
+    });
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+const updateUserRole = async (auth) => {
+  const res = await axios.put(`${API_URL}/user/role`, {}, {
+    headers: {
+      Authorization: `Bearer ${auth}`
+    }
+  });
+  return res;
+};
+
 export default {
   registerUser,
   loginUser,
   verifyUser,
   forgotPasword,
   resetPassword,
-  userProfile
+  userProfile,
+  updateUserProfile,
+  updateUserRole
 };

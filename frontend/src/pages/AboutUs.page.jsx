@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/footer/Footer.component';
 import AuthHeader from '../components/header/AuthHeader.component';
@@ -6,6 +6,9 @@ import Header from '../components/header/Header.component';
 import { useAuth } from '../hooks/auth';
 
 const AboutUs = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const { getUser } = useAuth();
   const user = JSON.parse(getUser());
   const navigate = useNavigate();

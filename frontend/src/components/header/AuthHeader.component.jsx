@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { UserCircle, LogOut, User, History, Bell, Loader, LayoutDashboard, Search } from 'lucide-react';
 import { Menu } from '@headlessui/react';
 import NotificationPanel from '../notifications/NotificationPanel.component';
+import { useAuth } from '../../hooks/auth';
 
 const AuthHeader = () => {
+  const { getUser } = useAuth();
+  const currentUser = JSON.parse(getUser());
   const navigate = useNavigate();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [unreadNotifications, setUnreadNotifications] = useState(3);
@@ -26,7 +29,6 @@ const AuthHeader = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Implement search functionality here
     console.log('Searching for:', searchQuery);
   };
 
@@ -75,7 +77,17 @@ const AuthHeader = () => {
               <Menu as='div' className='relative inline-block text-left'>
                 <Menu.Button className='flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'>
                   <span className='sr-only'>Open user menu</span>
-                  <UserCircle className='h-8 w-8 text-gray-400' />
+                  {currentUser.profileImage
+                    ? (
+                      <img
+                        src={currentUser.profileImage}
+                        alt='User profile'
+                        className='h-8 w-8 rounded-full object-cover'
+                      />
+                      )
+                    : (
+                      <UserCircle className='h-8 w-8 text-gray-400' />
+                      )}
                 </Menu.Button>
                 <Menu.Items className='absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
                   <div className='px-1 py-1'>

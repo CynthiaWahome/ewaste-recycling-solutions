@@ -14,6 +14,14 @@ userRouter.get('/profile', tokenExtractor, userExtractor, async (req, res) => {
   return res.json({ status: 'success', user });
 });
 
+userRouter.put('/profile', tokenExtractor, userExtractor, async (req, res) => {
+  const user = req.user;
+  const { profileImage } = req.body;
+  user.profileImage = profileImage;
+  await user.save();
+  return res.json({ status: 'sucess', message: 'user profile updated' });
+});
+
 userRouter.put('/role', tokenExtractor, userExtractor, async (req, res) => {
   const user = req.user;
   let role = 'user';

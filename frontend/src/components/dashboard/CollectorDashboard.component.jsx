@@ -31,7 +31,7 @@ const CollectorDashboard = () => {
     {
       name: 'View Pickup Requests',
       icon: <ClipboardList size={24} />,
-      action: () => navigate('/pickup-requests')
+      action: () => navigate('/pickup/requests')
     },
     {
       name: "Today's Route",
