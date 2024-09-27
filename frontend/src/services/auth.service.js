@@ -63,11 +63,35 @@ const userProfile = async (auth) => {
   }
 };
 
+const updateUserProfile = async (newUser, auth) => {
+  try {
+    res = await axios.put(`${API_URL}/user/profile`, newUser, {
+      headers: {
+        Authorization: `Bearer ${auth}`
+      }
+    });
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+const updateUserRole = async (auth) => {
+  const res = await axios.put(`${API_URL}/user/role`, {}, {
+    headers: {
+      Authorization: `Bearer ${auth}`
+    }
+  });
+  return res;
+};
+
 export default {
   registerUser,
   loginUser,
   verifyUser,
   forgotPasword,
   resetPassword,
-  userProfile
+  userProfile,
+  updateUserProfile,
+  updateUserRole
 };
