@@ -34,7 +34,10 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-
+  profileImage: {
+    type: String,
+    required: false
+  },
   location: [{ body: String, date: Date }],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }

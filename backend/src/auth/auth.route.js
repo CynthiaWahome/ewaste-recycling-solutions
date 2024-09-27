@@ -144,7 +144,8 @@ authRouter.post('/login', async (req, resp, next) => {
         accessToken: token,
         username: user.username,
         name: user.name,
-        role: user.role
+        role: user.role,
+        profileImage: user.profileImage
       });
     }
     // password provided did not match password hash
@@ -197,7 +198,10 @@ authRouter.post('/reset', async (req, resp, next) => {
   if (!user) {
     return resp.status(404).json({ error: 'no user with such email exists' });
   }
-  const userResetToken = await Token.findOne({ userId: user._id, action: 'reset' });
+  const userResetToken = await Token.findOne({
+    userId: user._id,
+    action: 'reset'
+  });
   if (!userResetToken) {
     return resp
       .status(401)
