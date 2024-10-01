@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'https://ewaste-ten.vercel.app/api/v1';
+const API_URL = 'https://e-waste-collection.onrender.com/api/v1';
 
 const registerUser = async (userDetails) => {
   try {
