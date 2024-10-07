@@ -1,7 +1,7 @@
 import axios from 'axios';
 const API_URL = 'https://e-waste-collection.onrender.com/api/v1/order';
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyBtOtH6MfeRqJmV-m-Qwla2gao4JQfGsZo';
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const cloudinaryUpload = async (data) => {
   const res = await axios.post(

@@ -18,7 +18,7 @@ const PickupLocationMap = ({ formData }) => {
   const toast = useToast();
   const [selected, setSelected] = useState(center);
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyBtOtH6MfeRqJmV-m-Qwla2gao4JQfGsZo',
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     libraries
   });
 

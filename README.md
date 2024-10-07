@@ -8,11 +8,10 @@
 ![Redux](https://img.shields.io/badge/-Redux-764ABC?logo=redux&logoColor=white&style=for-the-badge)
 ![Google Maps API](https://img.shields.io/badge/-Google%20Maps%20API-4285F4?logo=googlemaps&logoColor=white&style=for-the-badge)
 ![MongoDB](https://img.shields.io/badge/-MongoDB-47A248?logo=mongodb&logoColor=white&style=for-the-badge)
-
 ![Express.js](https://img.shields.io/badge/-Express.js-000000?logo=express&logoColor=white&style=for-the-badge)
 ![Cloudinary](https://img.shields.io/badge/-Cloudinary-3448C5?logo=cloudinary&logoColor=white&style=for-the-badge)
 ![Brevo](https://img.shields.io/badge/-Brevo-4EA94B?logo=sendinblue&logoColor=white&style=for-the-badge)
-![Render](https://img.shields.io/badge/-Render-46E3B7?logo=render&logoColor=white&style=for-the-badge)
+![Vercel](https://img.shields.io/badge/-Vercel-000000?logo=vercel&logoColor=white&style=for-the-badge)
 
 
 **E-Waste Recycling Solutions** is a web app that simplifies e-waste disposal by providing an intuitive platform for scheduling pickups and tracking collection status in real time. Functioning like a ride-hailing service, users can easily request e-waste pickups from the comfort of their location.
@@ -66,12 +65,10 @@ The app features two roles: regular users who request pickups and collectors/rid
 ### Installation
 
 Clone the Repository
-
 ```bash
-git clone https://github.com/CynthiaWahome/E-waste-collection.git
-cd E-waste-collection
+git clone https://github.com/CynthiaWahome/ewaste-recycling-solutions.git
+cd ewaste-recycling-solutions
 ```
-
 
 ### Configure Environment Variables
 
@@ -105,6 +102,15 @@ PORT=
 API_KEY=
 DOMAIN=
 
+```
+
+
+**Frontend Environment Variables**
+
+Create a `.env` file in the `frontend` directory and add the necessary environment variables for Vite:
+
+```
+VITE_GOOGLE_MAPS_API_KEY=your-google-api-key-here
 ```
 
 ### Run the Application
