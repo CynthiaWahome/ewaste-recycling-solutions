@@ -8,11 +8,32 @@ updates:
     directory: "/backend"
     schedule:
       interval: "weekly"
+    commit-message:
+      prefix: "fix"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    labels: ["dependencies"]
+    automerge: true
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
       interval: "weekly"
+    commit-message:
+      prefix: "fix"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    labels: ["dependencies"]
+    automerge: true
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
+    commit-message:
+      prefix: "fix"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    labels: ["dependencies"]
+    automerge: true
