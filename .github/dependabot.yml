@@ -14,7 +14,6 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
     labels: ["dependencies"]
-    automerge: true
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
@@ -25,7 +24,6 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
     labels: ["dependencies"]
-    automerge: true
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -36,4 +34,3 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
     labels: ["dependencies"]
-    automerge: true
