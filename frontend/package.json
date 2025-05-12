@@ -14,7 +14,7 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@headlessui/react": "^2.1.8",
+    "@headlessui/react": "^2.2.3",
     "@react-google-maps/api": "^2.20.5",
     "@reduxjs/toolkit": "^2.2.7",
     "axios": "^1.7.7",
